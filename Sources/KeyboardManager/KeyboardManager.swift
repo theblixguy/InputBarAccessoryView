@@ -244,7 +244,9 @@ open func bind(inputAccessoryView: UIView, withAdditionalBottomSpace additionalB
     @discardableResult
     open func bind(to scrollView: UIScrollView) -> Self {
         self.scrollView = scrollView
+        #if !os(visionOS)
         self.scrollView?.keyboardDismissMode = .interactive // allows dismissing keyboard interactively
+        #endif
         let recognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGestureRecognizer))
         recognizer.delegate = self
         self.panGesture = recognizer
@@ -366,7 +368,11 @@ open func bind(inputAccessoryView: UIView, withAdditionalBottomSpace additionalB
 
     /// Only receive a `UITouch` event when the `scrollView`'s keyboard dismiss mode is interactive
     open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        #if os(visionOS)
+          return true
+        #else
         return scrollView?.keyboardDismissMode == .interactive
+        #endif
     }
 
     /// Only recognice simultaneous gestures when its the `panGesture`

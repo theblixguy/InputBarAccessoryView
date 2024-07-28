@@ -402,9 +402,11 @@ open class InputBarAccessoryView: UIView {
     
     /// Adds the required notification observers
     private func setupObservers() {
+        #if !os(visionOS)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(InputBarAccessoryView.orientationDidChange),
                                                name: UIDevice.orientationDidChangeNotification, object: nil)
+        #endif
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(InputBarAccessoryView.inputTextViewDidChange),
                                                name: UITextView.textDidChangeNotification, object: inputTextView)
@@ -613,10 +615,14 @@ open class InputBarAccessoryView: UIView {
     ///
     /// - Returns: Max Height
     open func calculateMaxTextViewHeight() -> CGFloat {
+        #if os(visionOS)
+        return 50
+        #else
         if traitCollection.verticalSizeClass == .regular {
             return (UIScreen.main.bounds.height / 3).rounded(.down)
         }
         return (UIScreen.main.bounds.height / 5).rounded(.down)
+        #endif
     }
     
     // MARK: - Layout Helper Methods

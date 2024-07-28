@@ -45,10 +45,14 @@ open class InputBarSendButton: InputBarButtonItem {
     private let activityView: UIActivityIndicatorView = {
         let view: UIActivityIndicatorView
         
-        if #available(iOS 13.0, *) {
+        if #available(iOS 13.0, visionOS 1.0, *) {
             view = UIActivityIndicatorView(style: .medium)
         } else {
+            #if !os(visionOS)
             view = UIActivityIndicatorView(style: .gray)
+            #else
+            fatalError("UIActivityIndicatorView(style: .gray) is not available on visionOS")
+            #endif
         }
         
         view.isUserInteractionEnabled = false

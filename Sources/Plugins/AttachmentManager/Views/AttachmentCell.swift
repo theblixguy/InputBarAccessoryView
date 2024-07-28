@@ -38,10 +38,12 @@ open class AttachmentCell: UICollectionViewCell {
     public let containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        if #available(iOS 13, *) {
+        if #available(iOS 13, visionOS 1.0, *) {
             view.backgroundColor = .systemGray6
         } else {
+            #if !os(visionOS)
             view.backgroundColor = .groupTableViewBackground
+            #endif
         }
         view.layer.cornerRadius = 8
         view.clipsToBounds = true

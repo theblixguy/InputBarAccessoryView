@@ -121,6 +121,7 @@ open class InputTextView: UITextView {
         }
     }
     
+    #if !os(visionOS)
     open override var scrollIndicatorInsets: UIEdgeInsets {
         didSet {
             // When .zero a rendering issue can occur
@@ -132,6 +133,7 @@ open class InputTextView: UITextView {
             }
         }
     }
+    #endif
     
     /// A weak reference to the InputBarAccessoryView that the InputTextView is contained within
     open weak var inputBarAccessoryView: InputBarAccessoryView?
@@ -167,10 +169,12 @@ open class InputTextView: UITextView {
         backgroundColor = .clear
         font = UIFont.preferredFont(forTextStyle: .body)
         isScrollEnabled = false
+        #if !os(visionOS)
         scrollIndicatorInsets = UIEdgeInsets(top: .leastNonzeroMagnitude,
                                              left: .leastNonzeroMagnitude,
                                              bottom: .leastNonzeroMagnitude,
                                              right: .leastNonzeroMagnitude)
+        #endif
         setupPlaceholderLabel()
         setupObservers()
     }
@@ -196,9 +200,11 @@ open class InputTextView: UITextView {
     /// should be hidden or shown
     private func setupObservers() {
         
+        #if !os(visionOS)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(InputTextView.redrawTextAttachments),
                                                name: UIDevice.orientationDidChangeNotification, object: nil)
+        #endif
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(InputTextView.textViewTextDidChange),
                                                name: UITextView.textDidChangeNotification, object: nil)
